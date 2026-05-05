@@ -37,8 +37,8 @@ try:
     X_te_all = te.data
     y_te_all = np.array(te.targets)
 
-    tr_idx = np.random.choice(len(X_tr_all), 200, replace=False)
-    te_idx = np.random.choice(len(X_te_all), 50, replace=False)
+    tr_idx = np.random.choice(len(X_tr_all), 1000, replace=False)
+    te_idx = np.random.choice(len(X_te_all), 300, replace=False)
 
     X_train = X_tr_all[tr_idx].reshape(len(tr_idx), -1).astype(np.float32) / 255.0
     y_train = y_tr_all[tr_idx]
