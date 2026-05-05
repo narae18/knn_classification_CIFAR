@@ -37,13 +37,12 @@ try:
     X_te_all = te.data
     y_te_all = np.array(te.targets)
 
-    
     tr_idx = np.random.choice(len(X_tr_all), 200, replace=False)
     te_idx = np.random.choice(len(X_te_all), 50, replace=False)
 
-    X_train = X_tr_all[tr_idx].reshape(5000, -1).astype(np.float32) / 255.0
+    X_train = X_tr_all[tr_idx].reshape(len(tr_idx), -1).astype(np.float32) / 255.0
     y_train = y_tr_all[tr_idx]
-    X_test  = X_te_all[te_idx].reshape(1000, -1).astype(np.float32) / 255.0
+    X_test  = X_te_all[te_idx].reshape(len(te_idx), -1).astype(np.float32) / 255.0
     y_test  = y_te_all[te_idx]
     print("  Loaded via torchvision")
 
@@ -291,7 +290,7 @@ ax.set_xticks(x); ax.set_xticklabels([f'k={k}' for k in K_VALUES], fontsize=8)
 ax.legend(facecolor=PANEL, edgecolor='#333655', labelcolor=TXT, fontsize=9)
 sa(ax, 'Test Accuracy: L1 vs L2 per K', 'K', 'Accuracy')
 
-# ── 5. Confusion matrix ───────────────────────────────────
+# ── 5. Confusion matrix (with numbers) ───────────────────
 ax = axes[1, 1]
 cm = test_res[best_key]['cm']
 im = ax.imshow(cm, cmap='Blues')
@@ -300,6 +299,12 @@ short = ['air','auto','bird','cat','deer','dog','frog','horse','ship','truck']
 ax.set_xticklabels(short, rotation=45, ha='right', fontsize=7)
 ax.set_yticklabels(short, fontsize=7)
 plt.colorbar(im, ax=ax)
+for i in range(10):
+    for j in range(10):
+        ax.text(j, i, str(cm[i, j]),
+                ha='center', va='center',
+                color='white' if cm[i, j] > cm.max() / 2 else 'black',
+                fontsize=6)
 sa(ax, f'Confusion Matrix\n{best_key[0].upper()} k={best_key[1]} '
        f'(Acc={test_res[best_key]["accuracy"]:.3f})',
    'Predicted', 'True')
